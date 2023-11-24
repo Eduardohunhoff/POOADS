@@ -2,114 +2,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 class Conta {
+    private String numero;
+    private String agencia;
     private Cliente cliente;
-    private String numeroConta;
+    private double saldo;
 
-    public Conta(Cliente cliente, String numeroConta) {
+    // Construtor
+    public Conta(String numero, String agencia, Cliente cliente) {
+        this.numero = numero;
+        this.agencia = agencia;
         this.cliente = cliente;
-        this.numeroConta = numeroConta;
+    }
+
+    // Getters
+    public String getNumero() {
+        return numero;
+    }
+
+    public String getAgencia() {
+        return agencia;
     }
 
     public Cliente getCliente() {
         return cliente;
     }
-
-    public String getNumeroConta() {
-        return numeroConta;
-    }
-}
-
-class OperaBanco {
-    private List<Cliente> clientes;
-    private List<Conta> contas;
-
-    public OperaBanco() {
-        this.clientes = new ArrayList<>();
-        this.contas = new ArrayList<>();
-    }
-
-    public boolean cadastraCliente(Cliente cliente) {
-        if (!clientes.contains(cliente)) {
-            clientes.add(cliente);
-            return true;
+    
+    public void depositar(double valor) {
+        if (valor > 0) {
+            this.saldo += valor;
         } else {
-            return false; // Cliente já cadastrado
+            System.out.println("Valor de depósito inválido. O valor deve ser maior que zero.");
         }
     }
 
-    // Método para cadastrar conta
-    public boolean cadastraConta(String cpf, String numeroConta) {
-        Cliente cliente = buscaCliente(cpf);
-        if (cliente != null) {
-            Conta conta = new Conta(cliente, numeroConta);
-            contas.add(conta);
-            return true; // mE SALVA TALLES
+    // Getter para obter o saldo
+    public double getSaldo() {
+        return saldo;
+    }
+    
+    public void debitar(double valor) {
+        if (valor > 0 && this.saldo >= valor) {
+            this.saldo -= valor;
         } else {
-            return false; // Cliente não encontrado
+            System.out.println("Valor de débito inválido ou saldo insuficiente.");
         }
-    }
-
-
-    // Método para exibir contas cadastradas
-    public void exibirContas() {
-        System.out.println("Lista de Contas:");
-        for (Conta conta : contas) {
-            System.out.println("Cliente: " + conta.getCliente().getNome());
-            System.out.println("CPF: " + conta.getCliente().getCpf());
-            System.out.println("Número da Conta: " + conta.getNumeroConta());
-            System.out.println("-------------------------");
-        }
-    }
-}
-
- class Main {
-    public static void main(String[] args) {
-        OperaBanco operaBanco = new OperaBanco();
-        Scanner scanner = new Scanner(System.in);
-
-        // Cadastrar clientes
-        System.out.println("Cadastro de Clientes");
-
-        for (int i = 0; i < 2; i++) {
-            System.out.println("Cliente " + (i + 1));
-            System.out.print("Nome: ");
-            String nome = scanner.nextLine();
-
-            System.out.print("CPF: ");
-            String cpf = scanner.nextLine();
-
-            System.out.print("Profissão: ");
-            String profissao = scanner.nextLine();
-
-            Cliente cliente = new Cliente(nome, cpf, profissao);
-            if (operaBanco.cadastraCliente(cliente)) {
-                System.out.println("Cliente cadastrado com sucesso!");
-            } else {
-                System.out.println("Cliente já cadastrado!");
-            }
-        }
-
-        // Cadastrar contas
-        System.out.println("Cadastro de Contas");
-
-        System.out.print("Digite o CPF do cliente: ");
-        String cpfConta = scanner.nextLine();
-
-        System.out.print("Digite o número da conta: ");
-        String numeroConta = scanner.nextLine();
-
-        if (operaBanco.cadastraConta(cpfConta, numeroConta)) {
-            System.out.println("Conta cadastrada com sucesso!");
-        } else {
-            System.out.println("Cliente não encontrado. Cadastre o cliente primeiro.");
-        }
-
-        // Exibir contas cadastradas
-        operaBanco.exibirContas();
-
-        // Fechar o scanner
-        scanner.close();
     }
 }
