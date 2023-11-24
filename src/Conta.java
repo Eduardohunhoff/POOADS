@@ -45,7 +45,7 @@ class OperaBanco {
         if (cliente != null) {
             Conta conta = new Conta(cliente, numeroConta);
             contas.add(conta);
-            return true;
+            return true; // mE SALVA TALLES
         } else {
             return false; // Cliente não encontrado
         }
